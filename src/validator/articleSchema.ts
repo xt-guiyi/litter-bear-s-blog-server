@@ -3,7 +3,7 @@
  * @Author: 小熊熊
  * @Date: 2020-11-12 17:46:07
  * @LastEditors: 小熊熊
- * @LastEditTime: 2020-11-24 11:11:06
+ * @LastEditTime: 2020-11-25 17:01:07
  */
 import  {JSONSchemaType, DefinedError}  from 'ajv'
 import getValidator from './validator'
@@ -14,6 +14,7 @@ export interface ArticleSchema {
   articleText: string;
   tags: string[];
   bgImg: string;
+  isTop?: boolean;
 }
 
 // 文章json格式校验架构
@@ -30,6 +31,7 @@ const articleSchema: JSONSchemaType<ArticleSchema> = {
       maxItems: 10  
     },
     bgImg: { type: 'string' },
+    isTop: { type: 'boolean', nullable: true },
   },
   required: [ 'articleTitle', 'articleContent', 'articleText', 'tags', 'bgImg' ],
   additionalProperties: false,
@@ -42,20 +44,20 @@ export interface ArticleCommentSchema {
   email:string;
   website?: string;
   commentContent: string;
-  articleTitle: string;
+  articleId: string;
 } 
 
 // 文章评论json构架
-const ArticleCommentSchema: JSONSchemaType<ArticleCommentSchema> = {
+const articleCommentSchema: JSONSchemaType<ArticleCommentSchema> = {
   type: 'object',
   additionalProperties: false,
-  required: ['articleTitle', 'commentContent', 'nickname', 'email'],
+  required: [ 'commentContent', 'nickname', 'email', 'articleId'],
   properties: {
     parentId: {
       type: 'string',
       nullable: true
     },
-    articleTitle: {
+    articleId: {
       type: 'string',     
     },
     commentContent: {
@@ -78,35 +80,67 @@ const ArticleCommentSchema: JSONSchemaType<ArticleCommentSchema> = {
   }
 }
 
+export interface ArticlePaginationSchema {
+  isTop?: boolean; 
+  limit: number;
+  offset: number;
+  all?: boolean;
+}
+
+//文章分页参数json构架
+const articlePaginationSchema: JSONSchemaType<ArticlePaginationSchema> = {
+  type: 'object',
+  required: ['limit', 'offset'],
+  properties: {
+    isTop: {
+      type: 'boolean',
+      nullable: true,
+    },
+    limit: { type: 'number' , default: 20},
+    offset: { type: 'number', default: 0},
+    all: { type: 'boolean', nullable: true}
+  },
+  additionalProperties: false
+}
+
+
 export interface ArticleCommentPaginationSchema {
-  articleTitle: string; 
+  articleId: string; 
   limit: number;
   offset: number;
 }
 
-// 文章分页json构架
-const ArticleCommentPaginationSchema:JSONSchemaType<ArticleCommentPaginationSchema> = {
+// 文章评论分页json构架
+const articleCommentPaginationSchema:JSONSchemaType<ArticleCommentPaginationSchema> = {
   type: 'object',
   additionalProperties: false,
-  required: ['articleTitle', 'limit', 'offset'],
+  required: ['articleId', 'limit', 'offset'],
   properties: {
-    articleTitle: { type: 'string' },
+    articleId: { type: 'string' },
     limit: { type: 'number' , default: 20},
     offset: { type: 'number', default: 0}
   },
 }
 
 
-
+/** 文章router参数校验函数 */ 
 export  function articleValidator (data: Record<any, any>): DefinedError[] | undefined {
   return getValidator(articleSchema, data)
 }
-
+/** 文章评论router参数校验函数 */ 
 export  function articleCommentValidator(data: Record<any, any>): DefinedError[] | undefined{
-  return getValidator(ArticleCommentSchema, data)
+  return getValidator(articleCommentSchema, data)
 }
 
-export function articleCommentPaginationValidator (data: Record<any, any>): DefinedError[] | undefined{
-  return getValidator(ArticleCommentPaginationSchema, data)
+/** 文章分页router参数校验函数 */ 
+export function articlePaginationValidator (data: Record<any, any>): DefinedError[] | undefined{
+  return getValidator(articlePaginationSchema, data)
 }
+
+/** 文章评论分页router参数校验函数 */ 
+export function articleCommentPaginationValidator (data: Record<any, any>): DefinedError[] | undefined{
+  return getValidator(articleCommentPaginationSchema, data)
+}
+
+
 

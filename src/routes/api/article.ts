@@ -3,13 +3,13 @@
  * @Author: 小熊熊
  * @Date: 2020-11-12 15:19:18
  * @LastEditors: 小熊熊
- * @LastEditTime: 2020-11-23 14:36:20
+ * @LastEditTime: 2020-11-25 18:53:06
  */
 import Router from "@koa/router";
 import { addArticle, getArticleList, addArticleComment, getArticleCommentList } from '../../controller/article'
 import genValidator from '../../middleware/routerParameterValidator'
-import  { articleValidator, articleCommentValidator, articleCommentPaginationValidator } from '../../validator/articleSchema'
-import  {  paginationValidator } from '../../validator/commonSchema'
+import  { articleValidator, articleCommentValidator, articleCommentPaginationValidator,  articlePaginationValidator } from '../../validator/articleSchema'
+// import  {  paginationValidator } from '../../validator/commonSchema'
 export const router = new Router({
   prefix: '/api/',
   strict: true
@@ -24,7 +24,7 @@ router.post('articles', genValidator(articleValidator), async (ctx) => {
 })
 
 /** 获得文章列表路由 */
-router.get('articles', genValidator(paginationValidator),async (ctx) => {
+router.get('articles', genValidator(articlePaginationValidator),async (ctx) => {
   const articleQuery = ctx.request.query
   const result = await getArticleList(articleQuery)
   ctx.body = result

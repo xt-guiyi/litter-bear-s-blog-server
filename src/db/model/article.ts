@@ -3,7 +3,7 @@
  * @Author: 小熊熊
  * @Date: 2020-11-12 18:47:20
  * @LastEditors: 小熊熊
- * @LastEditTime: 2020-11-13 17:30:34
+ * @LastEditTime: 2020-11-24 19:14:08
  */
 import mongoose from 'mongoose';
 
@@ -51,6 +51,11 @@ const ArticleSchema = new Schema({
   bgImg: {
     type: String,
     default: 'https://blog.api.xiaoyou66.com/assets/images/background/img554.jpg'
+  },
+  isTop: {
+    type: Boolean,
+    default: false,
+    index: true
   }
 },
 {

@@ -3,13 +3,13 @@
  * @Author: 小熊熊
  * @Date: 2020-11-19 12:11:33
  * @LastEditors: 小熊熊
- * @LastEditTime: 2020-11-24 11:07:20
+ * @LastEditTime: 2020-11-25 14:02:35
  */
 import mongoose from 'mongoose'
 const {Schema, model} =  mongoose
 let ObjectId = mongoose.Schema.Types.ObjectId;
 const comment = new Schema({
-  // 父评论id
+  // 父评论人id
   parentId:{
     type: ObjectId,
     default: null
@@ -24,13 +24,14 @@ const comment = new Schema({
     type: String,
     default: null
   }, 
+  // 头像
   avatar: {
     type: String,
     required: true,
   },
-  // 评论文章标题
-  articleTitle: {
-    type: String,
+  // 评论文章id
+  articleId: {
+    type: ObjectId,
     required: true
   },
   // 邮箱

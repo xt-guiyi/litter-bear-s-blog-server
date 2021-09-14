@@ -3,7 +3,7 @@
  * @Author: 小熊熊
  * @Date: 2020-11-17 17:24:16
  * @LastEditors: 小熊熊
- * @LastEditTime: 2020-11-19 14:19:42
+ * @LastEditTime: 2020-11-25 11:21:00
  */
 import  {JSONSchemaType, DefinedError}  from 'ajv'
 import getValidator from './validator'
